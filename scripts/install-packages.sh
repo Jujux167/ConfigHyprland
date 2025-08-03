@@ -103,7 +103,14 @@ install_gpu_drivers() {
 install_login_manager() {
     print_step "11" "Installation Ly (login manager)"
     pacman -S --noconfirm ly
-    systemctl enable --now ly.service
+    
+    # Désactive les autres display managers
+    systemctl disable gdm sddm lightdm 2>/dev/null || true
+    
+    # Active Ly
+    systemctl enable ly
+    
+    print_success "Ly configuré comme display manager"
 }
 
 install_rofi() {
