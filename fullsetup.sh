@@ -32,19 +32,211 @@ pacman -S --noconfirm hyprland polkit \
     hyprpaper hyprpicker hypridle hyprlock hyprcursor \
     xdg-desktop-portal-hyprland hyprpolkitagent hyprsunset
 
-echo "=== [4] Waybar + config ==="
+echo "=== [4] Waybar + config complète ==="
 pacman -S --noconfirm waybar
 mkdir -p $HOME_DIR/.config/waybar
-cat > $HOME_DIR/.config/waybar/waybar.conf <<'EOF'
+cat > $HOME_DIR/.config/waybar/config <<'EOF'
 {
-  "layer":"top","position":"top",
-  "modules-left":["hyprland/workspaces"],
-  "modules-center":["clock"],
-  "modules-right":["pulseaudio","network","battery","tray"]
+    "layer": "top",
+    "position": "top",
+    "height": 32,
+    "modules-left": ["hyprland/workspaces", "hyprland/mode"],
+    "modules-center": ["clock"],
+    "modules-right": ["custom/gpu", "cpu", "memory", "temperature", "pulseaudio", "network", "battery", "tray"],
+    
+    "hyprland/workspaces": {
+        "disable-scroll": true,
+        "all-outputs": true,
+        "format": "{icon}",
+        "format-icons": {
+            "1": "󰈹",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "󰊴",
+            "urgent": "",
+            "focused": "",
+            "default": ""
+        }
+    },
+    
+    "clock": {
+        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+        "format": "{:%H:%M}",
+        "format-alt": "{:%Y-%m-%d}"
+    },
+    
+    "cpu": {
+        "format": " {usage}%",
+        "tooltip": true,
+        "interval": 1
+    },
+    
+    "memory": {
+        "format": " {used:0.1f}G",
+        "tooltip": true
+    },
+    
+    "temperature": {
+        "critical-threshold": 80,
+        "format": "{icon} {temperatureC}°C",
+        "format-icons": ["", "", "", "", ""]
+    },
+    
+    "custom/gpu": {
+        "exec": "nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader,nounits | head -1",
+        "format": "󰾲 {}%",
+        "interval": 3,
+        "tooltip": false
+    },
+    
+    "battery": {
+        "states": {
+            "warning": 30,
+            "critical": 15
+        },
+        "format": "{icon} {capacity}%",
+        "format-charging": "󰂄 {capacity}%",
+        "format-plugged": "󰂄 {capacity}%",
+        "format-alt": "{time} {icon}",
+        "format-icons": ["󰂎", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"]
+    },
+    
+    "network": {
+        "format-wifi": "󰤨 {essid}",
+        "format-ethernet": "󰈀 Connected",
+        "format-linked": "󰈀 {ifname} (No IP)",
+        "format-disconnected": "󰤮 Disconnected",
+        "format-alt": "{ifname}: {ipaddr}/{cidr}",
+        "tooltip-format": "{ifname} via {gwaddr}"
+    },
+    
+    "pulseaudio": {
+        "format": "{icon} {volume}%",
+        "format-bluetooth": "{icon}󰂯 {volume}%",
+        "format-bluetooth-muted": "󰝟󰂯",
+        "format-muted": "󰝟",
+        "format-source": "󰍬 {volume}%",
+        "format-source-muted": "󰍭",
+        "format-icons": {
+            "headphone": "󰋋",
+            "hands-free": "󰋎",
+            "headset": "󰋎",
+            "phone": "",
+            "portable": "",
+            "car": "",
+            "default": ["󰕿", "󰖀", "󰕾"]
+        },
+        "on-click": "pavucontrol"
+    }
 }
 EOF
+
 cat > $HOME_DIR/.config/waybar/style.css <<'EOF'
-* { font-family: Sans; font-size: 12px; background: #2e3440; color: #fff; }
+* {
+    font-family: 'FiraCode Nerd Font';
+    font-size: 13px;
+    border: none;
+    border-radius: 0;
+    margin: 0;
+    padding: 0;
+}
+
+window#waybar {
+    background: rgba(30, 30, 46, 0.9);
+    color: #cdd6f4;
+    border-bottom: 2px solid #89b4fa;
+}
+
+#workspaces button {
+    background: transparent;
+    color: #6c7086;
+    border-radius: 8px;
+    margin: 2px;
+    padding: 0 8px;
+}
+
+#workspaces button.active {
+    background: #89b4fa;
+    color: #1e1e2e;
+}
+
+#workspaces button:hover {
+    background: #313244;
+    color: #cdd6f4;
+}
+
+#clock {
+    background: #fab387;
+    color: #1e1e2e;
+    padding: 0 12px;
+    margin: 2px;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+#cpu {
+    background: #a6e3a1;
+    color: #1e1e2e;
+    padding: 0 10px;
+    margin: 2px;
+    border-radius: 8px;
+}
+
+#memory {
+    background: #f9e2af;
+    color: #1e1e2e;
+    padding: 0 10px;
+    margin: 2px;
+    border-radius: 8px;
+}
+
+#temperature {
+    background: #f38ba8;
+    color: #1e1e2e;
+    padding: 0 10px;
+    margin: 2px;
+    border-radius: 8px;
+}
+
+#custom-gpu {
+    background: #cba6f7;
+    color: #1e1e2e;
+    padding: 0 10px;
+    margin: 2px;
+    border-radius: 8px;
+}
+
+#pulseaudio {
+    background: #89dceb;
+    color: #1e1e2e;
+    padding: 0 10px;
+    margin: 2px;
+    border-radius: 8px;
+}
+
+#network {
+    background: #94e2d5;
+    color: #1e1e2e;
+    padding: 0 10px;
+    margin: 2px;
+    border-radius: 8px;
+}
+
+#battery {
+    background: #b4befe;
+    color: #1e1e2e;
+    padding: 0 10px;
+    margin: 2px;
+    border-radius: 8px;
+}
+
+#tray {
+    background: #585b70;
+    padding: 0 8px;
+    margin: 2px;
+    border-radius: 8px;
+}
 EOF
 chown -R $USERNAME: $HOME_DIR/.config/waybar
 
@@ -52,7 +244,12 @@ echo "=== [5] Terminal & explorateurs & lecteurs & outils système ==="
 pacman -S --noconfirm kitty nnn thunar mpv \
                       grim slurp wl-clipboard \
                       brightnessctl playerctl \
-                      firefox polkit-gnome imagemagick
+                      firefox polkit-gnome imagemagick \
+                      pavucontrol alacritty \
+                      file-roller unrar p7zip \
+                      neofetch btop \
+                      vlc \
+                      code
 
 echo "=== [6] Audio : PipeWire ==="
 pacman -S --noconfirm pipewire pipewire-alsa pipewire-pulse wireplumber
@@ -68,16 +265,20 @@ echo "=== [8] Batterie : TLP ==="
 pacman -S --noconfirm tlp
 systemctl enable --now tlp
 
-echo "=== [9] Thèmes GTK & icônes ==="
+echo "=== [9] Thèmes GTK & icônes & curseurs ==="
 pacman -S --noconfirm arc-gtk-theme breeze-gtk materia-gtk-theme \
-                      papirus-icon-theme
+                      papirus-icon-theme \
+                      bibata-cursor-theme \
+                      qt5ct qt6ct \
+                      lxappearance
 
-echo "=== [10] Pilotes GPU ==="
+echo "=== [10] Pilotes GPU NVIDIA RTX ==="
 GPU=$(lspci | grep -E "VGA|3D")
 if echo "$GPU" | grep -qi nvidia; then
-  pacman -S --noconfirm nvidia nvidia-utils nvidia-settings libva-nvidia-driver
+  pacman -S --noconfirm nvidia nvidia-utils nvidia-settings libva-nvidia-driver \
+                        nvtop nvidia-prime
 elif echo "$GPU" | grep -qi intel; then
-  pacman -S --noconfirm mesa libva-intel-driver intel-media-driver
+  pacman -S --noconfirm mesa libva-intel-driver intel-media-driver intel-gpu-tools
 else
   pacman -S --noconfirm mesa
 fi
@@ -380,12 +581,99 @@ chown $USERNAME: $HOME_DIR/.xinitrc
 echo "=== [15] Installation des Nerd Fonts monospace ==="
 pacman -S --noconfirm ttf-nerd-fonts-symbols-mono ttf-firacode-nerd
 
-echo "=== [16] Configuration Kitty pour utiliser FiraCode Nerd ==="
+echo "=== [15b] Paquets AUR pour le confort ==="
+sudo -u $USERNAME bash <<EOF
+yay -S --noconfirm --needed \
+    visual-studio-code-bin \
+    google-chrome \
+    spotify \
+    nerd-fonts-fira-code \
+    bibata-cursor-theme \
+    whitesur-gtk-theme \
+    tela-icon-theme
+EOF
+
+echo "=== [16] Configuration Kitty stylée ==="
 mkdir -p $HOME_DIR/.config/kitty
 cat > $HOME_DIR/.config/kitty/kitty.conf <<'EOF'
-# Police monospace Nerd Font
-font_family FiraCode Nerd
+# Police et apparence
+font_family      FiraCode Nerd Font
+bold_font        auto
+italic_font      auto
+bold_italic_font auto
 font_size 12.0
+
+# Curseur
+cursor_shape block
+cursor_blink_interval 0.5
+cursor_stop_blinking_after 15.0
+
+# Scrollback
+scrollback_lines 10000
+scrollback_pager less --chop-long-lines --RAW-CONTROL-CHARS +INPUT_LINE_NUMBER
+
+# Souris
+mouse_hide_wait 3.0
+url_color #89b4fa
+url_style curly
+
+# Performance
+repaint_delay 10
+input_delay 3
+sync_to_monitor yes
+
+# Thème Catppuccin Mocha
+foreground              #CDD6F4
+background              #1E1E2E
+selection_foreground    #1E1E2E
+selection_background    #F5E0DC
+
+# Couleurs du curseur
+cursor                  #F5E0DC
+cursor_text_color       #1E1E2E
+
+# Couleurs des URL
+url_color               #F5E0DC
+
+# Couleurs des bordures
+active_border_color     #B4BEFE
+inactive_border_color   #6C7086
+bell_border_color       #F9E2AF
+
+# Couleurs des onglets
+active_tab_foreground   #11111B
+active_tab_background   #CBA6F7
+inactive_tab_foreground #CDD6F4
+inactive_tab_background #181825
+tab_bar_background      #11111B
+
+# Couleurs normales
+color0 #45475A
+color1 #F38BA8
+color2 #A6E3A1
+color3 #F9E2AF
+color4 #89B4FA
+color5 #F5C2E7
+color6 #94E2D5
+color7 #BAC2DE
+
+# Couleurs claires
+color8  #585B70
+color9  #F38BA8
+color10 #A6E3A1
+color11 #F9E2AF
+color12 #89B4FA
+color13 #F5C2E7
+color14 #94E2D5
+color15 #A6ADC8
+
+# Raccourcis
+map ctrl+shift+c copy_to_clipboard
+map ctrl+shift+v paste_from_clipboard
+map ctrl+shift+t new_tab
+map ctrl+shift+q close_tab
+map ctrl+shift+n new_window
+map ctrl+shift+enter new_window
 EOF
 chown -R $USERNAME: $HOME_DIR/.config/kitty
 
