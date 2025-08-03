@@ -1,0 +1,106 @@
+* {
+    font-family: 'FiraCode Nerd Font';
+    font-size: 13px;
+    border: none;
+    border-radius: 0;
+    margin: 0;
+    padding: 0;
+}
+
+window#waybar {
+    background: rgba(30, 30, 46, 0.9);
+    color: #cdd6f4;
+    border-bottom: 2px solid #89b4fa;
+}
+
+#workspaces button {
+    background: transparent;
+    color: #6c7086;
+    border-radius: 8px;
+    margin: 2px;
+    padding: 0 8px;
+    transition: all 0.3s ease;
+}
+
+#workspaces button.active {
+    background: #89b4fa;
+    color: #1e1e2e;
+    font-weight: bold;
+}
+
+#workspaces button:hover {
+    background: #313244;
+    color: #cdd6f4;
+}
+
+#clock {
+    background: #fab387;
+    color: #1e1e2e;
+    padding: 0 12px;
+    margin: 2px;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+#cpu {
+    background: #a6e3a1;
+    color: #1e1e2e;
+    padding: 0 10px;
+    margin: 2px;
+    border-radius: 8px;
+}
+
+#memory {
+    background: #f9e2af;
+    color: #1e1e2e;
+    padding: 0 10px;
+    margin: 2px;
+    border-radius: 8px;
+}
+
+#temperature {
+    background: #f38ba8;
+    color: #1e1e2e;
+    padding: 0 10px;
+    margin: 2px;
+    border-radius: 8px;
+}
+
+#custom-gpu {
+    background: #cba6f7;
+    color: #1e1e2e;
+    padding: 0 10px;
+    margin: 2px;
+    border-radius: 8px;
+}
+
+#pulseaudio {
+    background: #89dceb;
+    color: #1e1e2e;
+    padding: 0 10px;
+    margin: 2px;
+    border-radius: 8px;
+}
+
+#network {
+    background: #94e2d5;
+    color: #1e1e2e;
+    padding: 0 10px;
+    margin: 2px;
+    border-radius: 8px;
+}
+
+#battery {
+    background: #b4befe;
+    color: #1e1e2e;
+    padding: 0 10px;
+    margin: 2px;
+    border-radius: 8px;
+}
+
+#tray {
+    background: #585b70;
+    padding: 0 8px;
+    margin: 2px;
+    border-radius: 8px;
+}
